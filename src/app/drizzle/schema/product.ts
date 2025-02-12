@@ -1,7 +1,7 @@
 import { pgTable, text, integer, timestamp, uuid, pgEnum } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { id, createdAt, updatedAt } from "../schemaHelpers";
-import { int } from "drizzle-orm/mysql-core";
+import { CourseProductTable } from "./courseProduct";
 
 export const productStatuses = ["public", "private"] as const;
 export type ProductStatus = typeof productStatuses[number];
@@ -12,12 +12,12 @@ export const ProductTable = pgTable("products", {
     name: text().notNull(),
     description: text().notNull(),
     imageUrl: text().notNull(),
-    priceInDollars: int().notNull(),
+    priceInDollars: integer().notNull(),
     status: productStatusEnum().notNull().default("private"),
     createdAt,
     updatedAt,
 })
 
-export const ProductRelationships = relations(ProductTable, ({ one, many }) => ({
-    test: one()
+export const ProductRelationships = relations(ProductTable, ({ many }) => ({
+    courseProducts: many(CourseProductTable)
 }) )
